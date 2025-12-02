@@ -1,4 +1,3 @@
-
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
 
 -- Only required if you have packer configured as `opt`
@@ -20,14 +19,17 @@ return require('packer').startup(function(use)
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
   use('theprimeagen/harpoon')
   use('tpope/vim-fugitive')
+  -- Auto-completions
+  use 'L3MON4D3/LuaSnip'
+  use 'saadparwaiz1/cmp_luasnip'
   use('neovim/nvim-lspconfig', { tag = 'v1.8.0', pin = true })
   use('hrsh7th/cmp-nvim-lsp')
   use('hrsh7th/nvim-cmp')
   use 'onsails/lspkind.nvim'
+
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
   use 'lewis6991/gitsigns.nvim'
 end)
-
