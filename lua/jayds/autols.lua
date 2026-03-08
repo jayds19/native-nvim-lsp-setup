@@ -52,6 +52,13 @@ elseif ts_root_dir then
   vim.lsp.enable('ts_ls')
 end
 
+vim.keymap.set("n", "<leader>oi", function()
+  vim.lsp.buf.code_action({
+    context = { only = { "source.organizeImports" } },
+    apply = true,
+  })
+end, { desc = "Organizar Imports" })
+
 -- LSP features
 
 -- This is where you enable features that only work
@@ -69,7 +76,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
     vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
     vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-    vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    -- vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    vim.keymap.set({ 'n', 'x' }, '<F3>', function()
+      require('conform').format({
+        lsp_fallback = true,
+        async = true,
+        timeout_ms = 500
+      })
+    end, opts)
+
     vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   end,
 })

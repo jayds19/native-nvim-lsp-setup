@@ -32,4 +32,57 @@ return require('packer').startup(function(use)
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
   use 'lewis6991/gitsigns.nvim'
+  -- Test integrations
+  use({
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-neotest/neotest-jest", -- The Jest adapter
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-jest")({
+            jestCommand = "npm test --",
+            env = { CI = true },
+            cwd = function(path)
+              return vim.fn.getcwd()
+            end,
+          }),
+        },
+      })
+    end
+  })
+  -- Format
+  use({
+    'stevearc/conform.nvim',
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          javascript = { "prettier" },
+          typescript = { "prettier" },
+          javascriptreact = { "prettier" },
+          typescriptreact = { "prettier" },
+          svelte = { "prettier" },
+          css = { "prettier" },
+          html = { "prettier" },
+          json = { "prettier" },
+          yaml = { "prettier" },
+          markdown = { "prettier" },
+        },
+        formatters = {
+          prettier = {
+            prepend_args = { "--single-quote", "true" },
+          },
+        },
+        format_on_save = {
+          lsp_fallback = true,
+          timeout_ms = 500,
+        },
+      })
+    end
+  })
 end)
