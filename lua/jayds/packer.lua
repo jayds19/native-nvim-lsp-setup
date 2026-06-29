@@ -56,33 +56,4 @@ return require('packer').startup(function(use)
       })
     end
   })
-  -- Format
-  use({
-    'stevearc/conform.nvim',
-    config = function()
-      require("conform").setup({
-        formatters_by_ft = {
-          javascript = { "prettier" },
-          typescript = { "prettier" },
-          javascriptreact = { "prettier" },
-          typescriptreact = { "prettier" },
-          svelte = { "prettier" },
-          css = { "prettier" },
-          html = { "prettier" },
-          json = { "prettier" },
-          yaml = { "prettier" },
-          markdown = { "prettier" },
-        },
-        formatters = {
-          prettier = {
-            prepend_args = { "--single-quote", "true" },
-          },
-        },
-        format_on_save = {
-          lsp_fallback = true,
-          timeout_ms = 500,
-        },
-      })
-    end
-  })
 end)

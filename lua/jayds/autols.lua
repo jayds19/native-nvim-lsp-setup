@@ -1,3 +1,24 @@
+-- Lua globals setup.
+vim.lsp.config('luals', {
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        globals = { 'vim' },
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false,
+      },
+      telemetry = {
+        enable = false },
+    },
+  },
+})
+
 vim.lsp.enable('luals')
 
 local cmp = require('cmp')
@@ -22,7 +43,7 @@ local ts_config = {
 
 local deno_config = {
   cmd = { 'deno', 'lsp' },
-  filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
+  filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'json', 'jsonc' },
   root_markers = { 'deno.json', 'deno.jsonc' },
   single_file_support = false,
 }
@@ -37,8 +58,12 @@ if deno_root_dir then
     root_dir = deno_root_dir,
     single_file_support = deno_config.single_file_support,
     capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    init_options = {
+      enable = true,
+      lint = true,
+      unstable = false,
+    }
   })
-
   vim.lsp.enable('denols')
 elseif ts_root_dir then
   vim.lsp.config('ts_ls', {
@@ -76,15 +101,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
     vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
     vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-    -- vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
     vim.keymap.set({ 'n', 'x' }, '<F3>', function()
-      require('conform').format({
-        lsp_fallback = true,
+      vim.lsp.buf.format({
         async = true,
-        timeout_ms = 500
+        timeout_ms = 2000
       })
     end, opts)
-
     vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   end,
 })
